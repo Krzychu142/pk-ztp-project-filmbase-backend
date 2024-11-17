@@ -41,3 +41,4 @@ docker-compose.yml
 
 ### Keys ###
 src/main/resources/keys
+/keys

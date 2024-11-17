@@ -29,8 +29,8 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers( "/api/auth/register", "/api/auth/login").permitAll(); // public
-                    auth.anyRequest().authenticated();                                              // all other secured
+                    auth.requestMatchers( "auth/**").permitAll(); // public
+                    auth.anyRequest().authenticated();              // all other secured
                 })
                 .oauth2ResourceServer( oauth2 -> oauth2
                         .jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtToUserConverter))
