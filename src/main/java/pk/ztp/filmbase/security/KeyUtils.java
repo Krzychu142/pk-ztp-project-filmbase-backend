@@ -1,10 +1,8 @@
 package pk.ztp.filmbase.security;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.LoggerFactoryFriend;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -87,7 +85,7 @@ public class KeyUtils {
           boolean created = directory.mkdirs();
           if(!created) {
               log.error("Failed to create keys directory");
-          };
+          }
       }
       try {
           KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -105,28 +103,28 @@ public class KeyUtils {
           throw new RuntimeException(e);
       }
       return keyPair;
-    };
+    }
 
     private KeyPair getRefreshTokenKeyPair() {
         if (Objects.isNull(_refreshTokenKeyPair)) {
             _refreshTokenKeyPair = getKeyPair(refreshTokenPublicKeyPath, refreshTokenPrivateKeyPath);
         }
         return _refreshTokenKeyPair;
-    };
+    }
 
     public RSAPublicKey getAccessTokenPublicKey() {
         return (RSAPublicKey) getAccessTokenKeyPair().getPublic();
-    };
+    }
 
     public RSAPrivateKey getAccessTokenPrivateKey() {
         return (RSAPrivateKey) getAccessTokenKeyPair().getPrivate();
-    };
+    }
 
     public RSAPublicKey getRefreshTokenPublicKey() {
         return (RSAPublicKey) getRefreshTokenKeyPair().getPublic();
-    };
+    }
 
     public RSAPrivateKey getRefreshTokenPrivateKey() {
         return (RSAPrivateKey) getRefreshTokenKeyPair().getPrivate();
-    };
+    }
 }
