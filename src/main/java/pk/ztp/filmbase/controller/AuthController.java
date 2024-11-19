@@ -62,7 +62,7 @@ public class AuthController {
     @PostMapping("/token")
     public ResponseEntity<ApiResponseDTO> token(@RequestBody TokenDTO tokenDTO) {
         Authentication auth = jwtRefreshAuthenticationProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
-        Jwt jwt = (Jwt) auth.getPrincipal();
+        // Jwt jwt = (Jwt) auth.getPrincipal();
         // check if present in db and not revoked
         return ResponseEntity.ok().body(new ApiResponseDTO("Refreshed", tokenGenerator.createToken(auth)));
     }
