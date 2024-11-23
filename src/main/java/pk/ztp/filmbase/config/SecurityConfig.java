@@ -29,8 +29,9 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers( "auth/**").permitAll(); // public
-                    auth.anyRequest().authenticated();              // all other secured
+                    auth.requestMatchers( "/auth/login", "/auth/register").anonymous();
+                    auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/token").permitAll();
+                    auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer( oauth2 -> oauth2
                         .jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtToUserConverter))
