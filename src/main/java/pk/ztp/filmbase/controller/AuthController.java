@@ -1,11 +1,11 @@
 package pk.ztp.filmbase.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -44,7 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponseDTO> register(@RequestBody SignupDTO signupDTO) {
+    public ResponseEntity<ApiResponseDTO> register(@Valid @RequestBody SignupDTO signupDTO) {
         User user = new User(signupDTO.getUsername(), signupDTO.getPassword());
         userDetailsManager.createUser(user);
 
@@ -53,14 +53,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ApiResponseDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         Authentication authRequest = UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.getUsername(), loginDTO.getPassword());
         Authentication authResult = authenticationProvider.authenticate(authRequest);
         return ResponseEntity.ok().body(new ApiResponseDTO("Logged", tokenGenerator.createToken(authResult)));
     }
 
     @PostMapping("/token")
-    public ResponseEntity<ApiResponseDTO> token(@RequestBody TokenDTO tokenDTO) {
+    public ResponseEntity<ApiResponseDTO> token(@Valid @RequestBody TokenDTO tokenDTO) {
         Authentication auth = jwtRefreshAuthenticationProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
         // Jwt jwt = (Jwt) auth.getPrincipal();
         // check if present in db and not revoked
