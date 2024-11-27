@@ -2,20 +2,24 @@ package pk.ztp.filmbase.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Check;
 
 @Entity
 @Getter
 @Setter
-public class Comment {
+@Check(constraints = "grade >= 1 AND grade <= 5")
+public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String comment;
+    @Min(1)
+    @Max(5)
+    private Integer grade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

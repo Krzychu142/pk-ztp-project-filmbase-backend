@@ -35,7 +35,7 @@ public class Film {
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Comment> comments;
 
-    // Relation to Grade   <- creatorUsername, grade (int above 1 to 10)
-    // maybe Average       <- sum of all grade / count of grade
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Rate> rating;
 
 }
