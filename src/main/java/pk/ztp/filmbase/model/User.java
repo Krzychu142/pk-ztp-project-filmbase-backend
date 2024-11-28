@@ -20,6 +20,7 @@ public class User implements UserDetails {
     private Long id;
 
     @NonNull
+    @Column(unique = true)
     private String username;
 
     @NonNull

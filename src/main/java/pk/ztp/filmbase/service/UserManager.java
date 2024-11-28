@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import pk.ztp.filmbase.exception.UserAlreadyExistsException;
 import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.UserRepository;
 
@@ -17,6 +18,9 @@ public class UserManager implements UserDetailsManager {
 
     @Override
     public void createUser(UserDetails user) {
+        if (userExists(user.getUsername())) {
+            throw new UserAlreadyExistsException("User with provided username already exists");
+        }
         ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save((User) user);
     }
@@ -38,7 +42,7 @@ public class UserManager implements UserDetailsManager {
 
     @Override
     public boolean userExists(String username) {
-        return false;
+        return userRepository.existsByUsername(username);
     }
 
     @Override
