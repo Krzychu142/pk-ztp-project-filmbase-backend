@@ -1,7 +1,8 @@
 package pk.ztp.filmbase.service;
 
-import pk.ztp.filmbase.model.Comment;
+import pk.ztp.filmbase.dto.CommentDTO;
+import pk.ztp.filmbase.model.User;
 
 public interface ICommentService {
-//    void saveComment(//TODO: CommentDTO commentDTO, Long UserId / User);
+    void saveComment(CommentDTO comment, User user);
 }

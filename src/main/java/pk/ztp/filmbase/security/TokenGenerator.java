@@ -1,6 +1,5 @@
 package pk.ztp.filmbase.security;
 
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -15,9 +14,9 @@ import pk.ztp.filmbase.model.User;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Component
-//@RequiredArgsConstructor
 public class TokenGenerator {
     private final JwtEncoder accessTokenEncoder;
     private final JwtEncoder refreshTokenEncoder;
@@ -64,7 +63,8 @@ public class TokenGenerator {
                 .issuer("filmbase")
                 .issuedAt(now)
                 .expiresAt(now.plus(5, ChronoUnit.MINUTES))
-                .subject(String.valueOf(user.getId()))
+                .id(UUID.randomUUID().toString())
+                .subject(user.getUsername())
                 .build();
         return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
@@ -77,7 +77,8 @@ public class TokenGenerator {
                 .issuer("filmbase")
                 .issuedAt(now)
                 .expiresAt(now.plus(30, ChronoUnit.DAYS))
-                .subject(String.valueOf(user.getId()))
+                .id(UUID.randomUUID().toString())
+                .subject(user.getUsername())
                 .build();
         return refreshTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
