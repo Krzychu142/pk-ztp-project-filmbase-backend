@@ -2,8 +2,10 @@ package pk.ztp.filmbase.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +32,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponseDTO> handleBadCredentialsException(BadCredentialsException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponseDTO(e.getMessage(), null));
+    }
+
+    @ExceptionHandler(InvalidBearerTokenException.class)
+    public ResponseEntity<ApiResponseDTO> handleInvalidBearerTokenException() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponseDTO("Invalid token", null));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponseDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponseDTO(e.getMessage(), null));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
