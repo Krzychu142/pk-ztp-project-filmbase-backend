@@ -21,8 +21,7 @@ public class CommentController {
 
     @PostMapping("/comment")
     public ResponseEntity<ApiResponseDTO> saveComment(@Valid @RequestBody CommentDTO commentDTO) {
-        commentService.saveComment(commentDTO, authenticationFacade.getCurrentUser());
-        return ResponseEntity.ok().body(new ApiResponseDTO("ok", null));
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", commentService.saveComment(commentDTO, authenticationFacade.getCurrentUser())));
     }
 
 }
