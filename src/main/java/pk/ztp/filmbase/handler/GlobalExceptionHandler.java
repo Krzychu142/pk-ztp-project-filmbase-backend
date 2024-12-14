@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import pk.ztp.filmbase.dto.ApiResponseDTO;
+import pk.ztp.filmbase.exception.ResourceNotFound;
 import pk.ztp.filmbase.exception.UserAlreadyExistsException;
 
 import java.util.HashMap;
