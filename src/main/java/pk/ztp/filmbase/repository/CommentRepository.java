@@ -6,5 +6,4 @@ import pk.ztp.filmbase.model.Comment;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-
 }

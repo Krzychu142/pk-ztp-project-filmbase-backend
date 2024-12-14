@@ -42,3 +42,7 @@ docker-compose.yml
 ### Keys ###
 src/main/resources/keys
 /keys
+
+### Resources ###
+## SQL Scripts ##
+src/main/resources/insert_sample_films.sql

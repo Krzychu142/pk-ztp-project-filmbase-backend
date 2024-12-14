@@ -1,22 +1,20 @@
 package pk.ztp.filmbase.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import pk.ztp.filmbase.dto.CommentDTO;
-import pk.ztp.filmbase.model.Comment;
+import pk.ztp.filmbase.enums.Genre;
 import pk.ztp.filmbase.model.Film;
 import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.CommentRepository;
 import pk.ztp.filmbase.repository.FilmRepository;
-
-import java.util.Optional;
+import pk.ztp.filmbase.repository.UserRepository;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class CommentServiceTests {
@@ -26,8 +24,21 @@ public class CommentServiceTests {
     @Autowired
     private FilmRepository filmRepository;
 
-    @MockBean
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private CommentRepository commentRepository;
+
+    @MockBean
+    private IFilmService filmService;
+
+    @AfterEach
+    public void tearDown() {
+        filmRepository.deleteAll();
+        userRepository.deleteAll();
+        commentRepository.deleteAll();
+    }
 
     @Test
     void shouldSaveComment() {
@@ -43,19 +54,21 @@ public class CommentServiceTests {
         Film film = new Film();
         film.setId(1L);
         film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
 
-        Mockito.when(filmRepository.findById(1L)).thenReturn(Optional.of(film));
+        filmRepository.save(film);
+        userRepository.save(user);
+        when(filmService.getFilmById(1L)).thenReturn(film);
 
         // Act
-        commentService.saveComment(commentDTO, user);
+        CommentDTO savedComment = commentService.saveComment(commentDTO, user);
 
         // Assert
-        ArgumentCaptor<Comment> commentCaptor = ArgumentCaptor.forClass(Comment.class);
-        verify(commentRepository).save(commentCaptor.capture());
-
-        Comment savedComment = commentCaptor.getValue();
         assertThat(savedComment).isNotNull();
         assertThat(savedComment.getComment()).isEqualTo("Test comment");
-        assertThat(savedComment.getUser()).isEqualTo(user);
+        assertThat(savedComment.getUser().getId()).isEqualTo(user.getId());
+        assertThat(savedComment.getUser().getUsername()).isEqualTo(user.getUsername());
+
+        verify(filmService, times(1)).getFilmById(1L);
     }
 }

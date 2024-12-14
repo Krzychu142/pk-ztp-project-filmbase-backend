@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Check;
 
@@ -12,6 +13,7 @@ import org.hibernate.annotations.Check;
 @Getter
 @Setter
 @Check(constraints = "grade >= 1 AND grade <= 5")
+@NoArgsConstructor
 public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
