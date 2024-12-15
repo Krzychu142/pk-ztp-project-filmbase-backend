@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,7 +29,12 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "film_id", nullable = false)
+    @JsonIgnore
     private Film film;
+
+    @Column(updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     public Comment(@NotBlank(message = "Comment can't be empty") String comment, User user, Film film) {
         this.comment = comment;
