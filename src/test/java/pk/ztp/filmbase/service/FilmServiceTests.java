@@ -29,17 +29,16 @@ public class FilmServiceTests {
     void shouldReturnFilm() {
         // Arrange
         Film film = new Film();
-        film.setId(1L);
         film.setTitle("test film");
         film.setGenre(Genre.ACTION);
-        filmRepository.save(film);
+        Film savedFilm = filmRepository.save(film);
 
         // Act
-        Film result = filmService.getFilmById(film.getId());
+        Film result = filmService.getFilmById(savedFilm.getId());
 
         // Assert
         assertNotNull(result, "The result should not be null");
-        assertEquals(film.getId(), result.getId(), "The IDs should match");
+        assertEquals(savedFilm.getId(), result.getId(), "The IDs should match");
         assertEquals(film.getTitle(), result.getTitle(), "The titles should match");
         assertEquals(film.getGenre(), result.getGenre(), "The genres should match");
     }

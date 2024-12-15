@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import pk.ztp.filmbase.dto.CommentDTO;
 import pk.ztp.filmbase.enums.Genre;
+import pk.ztp.filmbase.model.Comment;
 import pk.ztp.filmbase.model.Film;
 import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.CommentRepository;
@@ -43,25 +45,23 @@ public class CommentServiceTests {
     @Test
     void shouldSaveComment() {
         // Arrange
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setComment("Test comment");
-        commentDTO.setFilmId(1L);
-
         User user = new User();
-        user.setId(1L);
         user.setUsername("testuser");
+        User savedUser = userRepository.save(user);
 
         Film film = new Film();
-        film.setId(1L);
         film.setTitle("Test Film");
         film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
 
-        filmRepository.save(film);
-        userRepository.save(user);
-        when(filmService.getFilmById(1L)).thenReturn(film);
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setComment("Test comment");
+        commentDTO.setFilmId(savedFilm.getId());
+
+        when(filmService.getFilmById(savedFilm.getId())).thenReturn(savedFilm);
 
         // Act
-        CommentDTO savedComment = commentService.saveComment(commentDTO, user);
+        CommentDTO savedComment = commentService.saveComment(commentDTO, savedUser);
 
         // Assert
         assertThat(savedComment).isNotNull();
@@ -69,6 +69,38 @@ public class CommentServiceTests {
         assertThat(savedComment.getUser().getId()).isEqualTo(user.getId());
         assertThat(savedComment.getUser().getUsername()).isEqualTo(user.getUsername());
 
-        verify(filmService, times(1)).getFilmById(1L);
+        verify(filmService, times(1)).getFilmById(savedFilm.getId());
     }
+
+    @Test
+    void shouldReturnAllCommentsByFilmId() {
+        // Arrange
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        User user = new User();
+        user.setUsername("testuser");
+        User savedUser = userRepository.save(user);
+
+        Comment comment1 = new Comment("Comment 1", savedUser, savedFilm);
+        Comment comment2 = new Comment("Comment 2", savedUser, savedFilm);
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
+
+        int pageNumber = 0;
+        int pageSize = 10;
+        String sortDirection = "ASC";
+
+        // Act
+        Page<Comment> commentsPage = commentService.getAllCommentsByFilmId(film.getId(), pageNumber, pageSize, sortDirection);
+
+        // Assert
+        assertThat(commentsPage).isNotNull();
+        assertThat(commentsPage.getTotalElements()).isEqualTo(2);
+        assertThat(commentsPage.getContent().get(0).getComment()).isEqualTo("Comment 1");
+        assertThat(commentsPage.getContent().get(1).getComment()).isEqualTo("Comment 2");
+    }
+
 }
