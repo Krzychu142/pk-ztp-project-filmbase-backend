@@ -33,6 +33,7 @@ public class SecurityConfig {
                     auth.requestMatchers( "/auth/login", "/auth/register").anonymous();
                     auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/token").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/comments/*").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/films/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer( oauth2 -> oauth2
