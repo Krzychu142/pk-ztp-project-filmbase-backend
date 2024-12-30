@@ -12,6 +12,7 @@ public class RateController {
      * 1. RATE FILM
      * 2. GET ALL RATES BY FILM ID
      * 3. GET AVERAGE OF RATES BY FILM ID
+     * 4. GET RATE COUNT
      * */
 
 }
