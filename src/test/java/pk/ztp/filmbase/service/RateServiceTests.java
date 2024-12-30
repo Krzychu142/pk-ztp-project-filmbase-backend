@@ -38,7 +38,6 @@ public class RateServiceTests {
 
     @Test
     void shouldReturnRateResponseDTOWhenFilmExistsAndValidRateRequestDTO() {
-
         // Arrange
         final int grade = 3;
 
@@ -62,7 +61,6 @@ public class RateServiceTests {
         Assertions.assertNotNull(rateResponseDTO);
         Assertions.assertEquals(grade, rateResponseDTO.getGrade());
         Assertions.assertEquals(savedFilm.getId(), rateResponseDTO.getFilmId());
-
     }
 
 }
