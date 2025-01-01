@@ -21,7 +21,7 @@ public class CommentController {
 
     @DeleteMapping("/comment/{commentId}")
     public ResponseEntity<ApiResponseDTO> deleteComment(@PathVariable @Min(1) long commentId) {
-        System.out.println(commentId);
+        commentService.deleteComment(commentId, authenticationFacade.getCurrentUser());
         return ResponseEntity.ok().body(new ApiResponseDTO("ok", null));
     }
 
@@ -30,7 +30,7 @@ public class CommentController {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok", commentService.saveComment(commentDTO, authenticationFacade.getCurrentUser())));
     }
 
-    @GetMapping("/{filmId}")
+    @GetMapping("/film/{filmId}")
     public ResponseEntity<ApiResponseDTO> getAllCommentsByFilmId(
             @Min(1) @PathVariable long filmId,
             @RequestParam(name = "page-number", defaultValue = "0") @Min(0) int pageNumber,

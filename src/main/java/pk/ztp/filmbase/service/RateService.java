@@ -2,6 +2,9 @@ package pk.ztp.filmbase.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pk.ztp.filmbase.dto.RateRequestDTO;
 import pk.ztp.filmbase.dto.RateResponseDTO;
@@ -45,7 +48,8 @@ public class RateService implements IRateService, IDeletableResourceService<Rate
 
     @Override
     public Page<Rate> getRates(int pageNumber, int pageSize, String sortDirection, long filmId) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.fromString(sortDirection), "grade"));
+        return rateRepository.findByFilmId(filmId, pageable);
     }
 
     @Override

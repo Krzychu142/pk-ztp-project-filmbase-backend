@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
 import pk.ztp.filmbase.dto.RateRequestDTO;
 import pk.ztp.filmbase.dto.RateResponseDTO;
@@ -120,6 +121,52 @@ public class RateServiceTests {
         // Verify exception message
         Assertions.assertEquals("You do not have permission to delete this resource.", exception.getMessage());
         Assertions.assertFalse(rateRepository.findById(savedRate.getId()).isEmpty());
+    }
+
+    @Test
+    void shouldReturnRatesWhenFilmExistsAndHasRates(){
+        // Arrange
+        int maxGrade = 5;
+        int midGrade = 3;
+        int minGrade = 1;
+
+        User user = new User();
+        user.setUsername("testuser");
+        User savedUser = userRepository.save(user);
+
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        Rate rateMax = new Rate();
+        rateMax.setUser(savedUser);
+        rateMax.setFilm(savedFilm);
+        rateMax.setGrade(maxGrade);
+        Rate savedRateMax = rateRepository.save(rateMax);
+
+        Rate rateMid = new Rate();
+        rateMid.setUser(savedUser);
+        rateMid.setFilm(savedFilm);
+        rateMid.setGrade(midGrade);
+        Rate savedRateMid = rateRepository.save(rateMid);
+
+        Rate rateMin = new Rate();
+        rateMin.setUser(savedUser);
+        rateMin.setFilm(savedFilm);
+        rateMin.setGrade(minGrade);
+        Rate savedRateMin = rateRepository.save(rateMin);
+
+        //Act
+        Page<Rate> resultRates = rateService.getRates(0, 3, "ASC", savedFilm.getId());
+
+        //Assert
+        Assertions.assertNotNull(resultRates);
+        Assertions.assertEquals(3, resultRates.getTotalElements());
+        Assertions.assertEquals(3, resultRates.getNumberOfElements());
+        Assertions.assertEquals(savedRateMax.getGrade(), resultRates.getContent().get(2).getGrade());
+        Assertions.assertEquals(savedRateMid.getGrade(), resultRates.getContent().get(1).getGrade());
+        Assertions.assertEquals(savedRateMin.getGrade(), resultRates.getContent().get(0).getGrade());
     }
 
 }
