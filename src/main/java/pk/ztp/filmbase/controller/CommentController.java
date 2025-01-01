@@ -19,6 +19,8 @@ public class CommentController {
     private final IAuthenticationFacade authenticationFacade;
     private final ICommentService commentService;
 
+    // TODO: delete comment
+
     @PostMapping("/comment")
     public ResponseEntity<ApiResponseDTO> saveComment(@Valid @RequestBody CommentDTO commentDTO) {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok", commentService.saveComment(commentDTO, authenticationFacade.getCurrentUser())));

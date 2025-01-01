@@ -8,6 +8,7 @@ import pk.ztp.filmbase.model.User;
 
 public interface IRateService {
     RateResponseDTO rateFilm(RateRequestDTO rateRequestDTO, User user);
+    void deleteRate(long rateId, User user);
     Page<Rate> getRates(int pageNumber, int pageSize, String sortDirection, long filmId);
     Long getRateAverageByFilmId(long filmId);
     int getRateCount(long filmId);

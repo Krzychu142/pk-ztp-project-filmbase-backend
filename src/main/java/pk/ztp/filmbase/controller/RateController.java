@@ -3,10 +3,7 @@ package pk.ztp.filmbase.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pk.ztp.filmbase.dto.ApiResponseDTO;
 import pk.ztp.filmbase.dto.RateRequestDTO;
 import pk.ztp.filmbase.security.IAuthenticationFacade;
@@ -22,8 +19,7 @@ public class RateController {
 
     /**
      * TODO:
-     * 1. RATE FILM
-     * -- DELETE RATE BY RATE ID
+     * -- DELETE RATE BY RATE ID IF USER IS OWNER
      * 2. GET ALL RATES BY FILM ID
      * 3. GET AVERAGE OF RATES BY FILM ID
      * 4. GET RATE COUNT
@@ -34,6 +30,12 @@ public class RateController {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok",
                 rateService.rateFilm(rateRequestDTO, authenticationFacade.getCurrentUser()))
         );
+    }
+
+    @DeleteMapping("/rate/{rateId}")
+    public ResponseEntity<ApiResponseDTO> rateFilm(@PathVariable long rateId) {
+        rateService.deleteRate(rateId, authenticationFacade.getCurrentUser());
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", null));
     }
 
 }
