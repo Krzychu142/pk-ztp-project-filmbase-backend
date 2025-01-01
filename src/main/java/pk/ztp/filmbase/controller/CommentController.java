@@ -19,7 +19,11 @@ public class CommentController {
     private final IAuthenticationFacade authenticationFacade;
     private final ICommentService commentService;
 
-    // TODO: delete comment
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<ApiResponseDTO> deleteComment(@PathVariable @Min(1) long commentId) {
+        System.out.println(commentId);
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", null));
+    }
 
     @PostMapping("/comment")
     public ResponseEntity<ApiResponseDTO> saveComment(@Valid @RequestBody CommentDTO commentDTO) {

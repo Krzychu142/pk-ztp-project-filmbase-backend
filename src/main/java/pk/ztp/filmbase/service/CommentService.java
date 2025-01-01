@@ -5,16 +5,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import pk.ztp.filmbase.dto.CommentDTO;
 import pk.ztp.filmbase.dto.UserDTO;
+import pk.ztp.filmbase.exception.ResourceNotFound;
 import pk.ztp.filmbase.model.Comment;
+import pk.ztp.filmbase.model.Rate;
 import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.CommentRepository;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
-public class CommentService implements ICommentService {
+public class CommentService implements ICommentService, IDeletableResourceService<Comment> {
 
     private final CommentRepository commentRepository;
     private final IFilmService filmService;
@@ -30,6 +35,17 @@ public class CommentService implements ICommentService {
     public Page<Comment> getAllCommentsByFilmId(long filmId, int pageNumber, int pageSize, String sortDirection) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.fromString(sortDirection), "createdAt"));
         return commentRepository.findByFilmId(filmId, pageable);
+    }
+
+    @Override
+    public void deleteComment(long commentId, User user) {
+        deleteResource(
+                commentId,
+                user,
+                commentRepository::findById,
+                comment -> comment.getUser().getId(),
+                commentRepository::delete
+        );
     }
 
 }

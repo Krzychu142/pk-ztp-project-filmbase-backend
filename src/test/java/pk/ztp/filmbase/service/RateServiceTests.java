@@ -118,7 +118,7 @@ public class RateServiceTests {
         );
 
         // Verify exception message
-        Assertions.assertEquals("User does not have permission to delete this rate.", exception.getMessage());
+        Assertions.assertEquals("You do not have permission to delete this resource.", exception.getMessage());
         Assertions.assertFalse(rateRepository.findById(savedRate.getId()).isEmpty());
     }
 
