@@ -55,13 +55,20 @@ public class RateService implements IRateService, IDeletableResourceService<Rate
     }
 
     @Override
-    public int getRateAverageByFilmId(long filmId) {
+    public double getRateAverageByFilmId(long filmId) {
         List<Rate> rates = getRatesByFilmId(filmId);
-        return 0;
+        if (rates.isEmpty()) {
+            return 0.0;
+        }
+        return (double) getRateSum(rates) / rates.size();
+    }
+
+    private int getRateSum(List<Rate> rates) {
+        return rates.stream().mapToInt(Rate::getGrade).sum();
     }
 
     @Override
-    public long getRateCount(long filmId) {
+    public long getRateCountByFilmId(long filmId) {
         return getRatesByFilmId(filmId).size();
     }
 

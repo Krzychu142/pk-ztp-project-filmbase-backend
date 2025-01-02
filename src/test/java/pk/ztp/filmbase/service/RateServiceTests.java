@@ -17,8 +17,6 @@ import pk.ztp.filmbase.repository.FilmRepository;
 import pk.ztp.filmbase.repository.RateRepository;
 import pk.ztp.filmbase.repository.UserRepository;
 
-import java.util.List;
-
 @SpringBootTest
 public class RateServiceTests {
 
@@ -206,14 +204,14 @@ public class RateServiceTests {
         rateRepository.save(thirdRate);
 
         //Act
-        long countOfRates = rateService.getRateCount(savedFilm.getId());
+        long countOfRates = rateService.getRateCountByFilmId(savedFilm.getId());
 
         //Assert
         Assertions.assertEquals(3, countOfRates);
     }
 
     @Test
-    void shouldReturn0WhenNoRatesFound(){
+    void shouldReturnCount0WhenNoRatesFound(){
         //Arrange
         User user = new User();
         user.setUsername("testuser");
@@ -225,10 +223,70 @@ public class RateServiceTests {
         Film savedFilm = filmRepository.save(film);
 
         //Act
-        long countOfRates = rateService.getRateCount(savedFilm.getId());
+        long countOfRates = rateService.getRateCountByFilmId(savedFilm.getId());
 
         //Assert
         Assertions.assertEquals(0, countOfRates);
+    }
+
+    @Test
+    void shouldReturn3WhenSumOf3RatesAreEqual9(){
+        // Arrange
+        int maxGrade = 5;
+        int midGrade = 3;
+        int minGrade = 1;
+
+        User user = new User();
+        user.setUsername("testuser");
+        User savedUser = userRepository.save(user);
+
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        Rate firstRate = new Rate();
+        firstRate.setUser(savedUser);
+        firstRate.setFilm(savedFilm);
+        firstRate.setGrade(maxGrade);
+        rateRepository.save(firstRate);
+
+        Rate secondRate = new Rate();
+        secondRate.setUser(savedUser);
+        secondRate.setFilm(savedFilm);
+        secondRate.setGrade(midGrade);
+        rateRepository.save(secondRate);
+
+        Rate thirdRate = new Rate();
+        thirdRate.setUser(savedUser);
+        thirdRate.setFilm(savedFilm);
+        thirdRate.setGrade(minGrade);
+        rateRepository.save(thirdRate);
+
+        //Act
+        double averageOfRates = rateService.getRateAverageByFilmId(savedFilm.getId());
+
+        //Assert
+        Assertions.assertEquals(3.0, averageOfRates);
+    }
+
+    @Test
+    void shouldReturnAverage0WhenNoRatesFound(){
+        //Arrange
+        User user = new User();
+        user.setUsername("testuser");
+        userRepository.save(user);
+
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        //Act
+        double averageOfRates = rateService.getRateAverageByFilmId(savedFilm.getId());
+
+        //Assert
+        Assertions.assertEquals(0.0, averageOfRates);
     }
 
 }

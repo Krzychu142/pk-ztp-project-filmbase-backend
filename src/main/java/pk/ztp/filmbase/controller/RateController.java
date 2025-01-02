@@ -50,7 +50,7 @@ public class RateController {
 
     @GetMapping("/rate/count/film/{filmId}")
     public ResponseEntity<ApiResponseDTO> getRateCountByFilmId(@PathVariable @Min(1) long filmId) {
-        return ResponseEntity.ok().body(new ApiResponseDTO("ok", rateService.getRateAverageByFilmId(filmId)));
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", rateService.getRateCountByFilmId(filmId)));
     }
 
 }
