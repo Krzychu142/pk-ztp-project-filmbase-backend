@@ -20,12 +20,6 @@ public class RateController {
     private final IRateService rateService;
     private final IAuthenticationFacade authenticationFacade;
 
-    /**
-     * TODO:
-     * 3. GET AVERAGE OF RATES BY FILM ID
-     * 4. GET RATE COUNT
-     * */
-
     @PostMapping("/rate")
     public ResponseEntity<ApiResponseDTO> rateFilm(@Valid @RequestBody RateRequestDTO rateRequestDTO) {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok",
@@ -47,6 +41,16 @@ public class RateController {
             @PathVariable @Min(1) long filmId
     ) {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok",  rateService.getRates(pageNumber, pageSize, sortDirection, filmId)));
+    }
+
+    @GetMapping("/rate/average/film/{filmId}")
+    public ResponseEntity<ApiResponseDTO> getRateAverageByFilmId(@PathVariable @Min(1) long filmId) {
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", rateService.getRateAverageByFilmId(filmId)));
+    }
+
+    @GetMapping("/rate/count/film/{filmId}")
+    public ResponseEntity<ApiResponseDTO> getRateCountByFilmId(@PathVariable @Min(1) long filmId) {
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", rateService.getRateAverageByFilmId(filmId)));
     }
 
 }

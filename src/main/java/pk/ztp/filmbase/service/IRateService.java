@@ -10,6 +10,6 @@ public interface IRateService {
     RateResponseDTO rateFilm(RateRequestDTO rateRequestDTO, User user);
     void deleteRate(long rateId, User user);
     Page<Rate> getRates(int pageNumber, int pageSize, String sortDirection, long filmId);
-    Long getRateAverageByFilmId(long filmId);
-    int getRateCount(long filmId);
+    int getRateAverageByFilmId(long filmId);
+    long getRateCount(long filmId);
 }

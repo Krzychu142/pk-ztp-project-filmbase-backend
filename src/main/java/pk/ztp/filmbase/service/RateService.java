@@ -14,6 +14,8 @@ import pk.ztp.filmbase.model.Rate;
 import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.RateRepository;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -53,12 +55,17 @@ public class RateService implements IRateService, IDeletableResourceService<Rate
     }
 
     @Override
-    public Long getRateAverageByFilmId(long filmId) {
-        return 0L;
+    public int getRateAverageByFilmId(long filmId) {
+        List<Rate> rates = getRatesByFilmId(filmId);
+        return 0;
     }
 
     @Override
-    public int getRateCount(long filmId) {
-        return 0;
+    public long getRateCount(long filmId) {
+        return getRatesByFilmId(filmId).size();
+    }
+
+    private List<Rate> getRatesByFilmId(long filmId) {
+        return filmService.getFilmById(filmId).getRating();
     }
 }

@@ -17,6 +17,8 @@ import pk.ztp.filmbase.repository.FilmRepository;
 import pk.ztp.filmbase.repository.RateRepository;
 import pk.ztp.filmbase.repository.UserRepository;
 
+import java.util.List;
+
 @SpringBootTest
 public class RateServiceTests {
 
@@ -167,6 +169,66 @@ public class RateServiceTests {
         Assertions.assertEquals(savedRateMax.getGrade(), resultRates.getContent().get(2).getGrade());
         Assertions.assertEquals(savedRateMid.getGrade(), resultRates.getContent().get(1).getGrade());
         Assertions.assertEquals(savedRateMin.getGrade(), resultRates.getContent().get(0).getGrade());
+    }
+
+    @Test
+    void shouldReturnCountOfRates3WhenFilmHas3Rates(){
+        // Arrange
+        int maxGrade = 5;
+        int midGrade = 3;
+        int minGrade = 1;
+
+        User user = new User();
+        user.setUsername("testuser");
+        User savedUser = userRepository.save(user);
+
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        Rate firstRate = new Rate();
+        firstRate.setUser(savedUser);
+        firstRate.setFilm(savedFilm);
+        firstRate.setGrade(maxGrade);
+        rateRepository.save(firstRate);
+
+        Rate secondRate = new Rate();
+        secondRate.setUser(savedUser);
+        secondRate.setFilm(savedFilm);
+        secondRate.setGrade(midGrade);
+        rateRepository.save(secondRate);
+
+        Rate thirdRate = new Rate();
+        thirdRate.setUser(savedUser);
+        thirdRate.setFilm(savedFilm);
+        thirdRate.setGrade(minGrade);
+        rateRepository.save(thirdRate);
+
+        //Act
+        long countOfRates = rateService.getRateCount(savedFilm.getId());
+
+        //Assert
+        Assertions.assertEquals(3, countOfRates);
+    }
+
+    @Test
+    void shouldReturn0WhenNoRatesFound(){
+        //Arrange
+        User user = new User();
+        user.setUsername("testuser");
+        userRepository.save(user);
+
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        //Act
+        long countOfRates = rateService.getRateCount(savedFilm.getId());
+
+        //Assert
+        Assertions.assertEquals(0, countOfRates);
     }
 
 }
