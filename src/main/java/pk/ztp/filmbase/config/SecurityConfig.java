@@ -34,6 +34,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/token").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/comments/film/*").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/rates/film/*").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/rates/rate/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/films/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
