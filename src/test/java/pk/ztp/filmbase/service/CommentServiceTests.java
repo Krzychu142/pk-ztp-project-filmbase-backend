@@ -1,11 +1,13 @@
 package pk.ztp.filmbase.service;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.AccessDeniedException;
 import pk.ztp.filmbase.dto.CommentDTO;
 import pk.ztp.filmbase.enums.Genre;
 import pk.ztp.filmbase.model.Comment;
@@ -101,6 +103,35 @@ public class CommentServiceTests {
         assertThat(commentsPage.getTotalElements()).isEqualTo(2);
         assertThat(commentsPage.getContent().get(0).getComment()).isEqualTo("Comment 1");
         assertThat(commentsPage.getContent().get(1).getComment()).isEqualTo("Comment 2");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserIsNotOwner() {
+        User guest = new User();
+        guest.setUsername("testuser");
+        User savedGuest = userRepository.save(guest);
+
+        User owner = new User();
+        owner.setUsername("testuser2");
+        User savedOwner = userRepository.save(owner);
+
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        Comment comment1 = new Comment("Comment 1", savedOwner, savedFilm);
+        Comment savedComment = commentRepository.save(comment1);
+
+        //Act & Assert
+        AccessDeniedException exception = Assertions.assertThrows(
+                AccessDeniedException.class,
+                () -> commentService.deleteComment(savedComment.getId(), savedGuest)
+        );
+
+        // Verify exception message
+        Assertions.assertEquals("You do not have permission to delete this resource.", exception.getMessage());
+        Assertions.assertFalse(commentRepository.findById(savedComment.getId()).isEmpty());
     }
 
 }

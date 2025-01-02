@@ -19,12 +19,18 @@ public class CommentController {
     private final IAuthenticationFacade authenticationFacade;
     private final ICommentService commentService;
 
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<ApiResponseDTO> deleteComment(@PathVariable @Min(1) long commentId) {
+        commentService.deleteComment(commentId, authenticationFacade.getCurrentUser());
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", null));
+    }
+
     @PostMapping("/comment")
     public ResponseEntity<ApiResponseDTO> saveComment(@Valid @RequestBody CommentDTO commentDTO) {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok", commentService.saveComment(commentDTO, authenticationFacade.getCurrentUser())));
     }
 
-    @GetMapping("/{filmId}")
+    @GetMapping("/film/{filmId}")
     public ResponseEntity<ApiResponseDTO> getAllCommentsByFilmId(
             @Min(1) @PathVariable long filmId,
             @RequestParam(name = "page-number", defaultValue = "0") @Min(0) int pageNumber,

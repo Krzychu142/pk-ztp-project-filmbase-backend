@@ -8,4 +8,5 @@ import pk.ztp.filmbase.model.User;
 public interface ICommentService {
     CommentDTO saveComment(CommentDTO comment, User user);
     Page<Comment> getAllCommentsByFilmId(long filmId, int pageNumber, int pageSize, String sortDirection);
+    void deleteComment(long commentId, User user);
 }
