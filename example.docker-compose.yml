@@ -5,7 +5,7 @@ services:
     image: filmbase
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: example.Dockerfile
     ports:
       - "8080:8080"
     environment:
