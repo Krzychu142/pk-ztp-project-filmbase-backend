@@ -1,0 +1,385 @@
+{
+	"info": {
+		"_postman_id": "81126add-99be-4d9e-b6cf-a3b139b3f811",
+		"name": "filmbase",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25495510"
+	},
+	"item": [
+		{
+			"name": "authentication",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"123234512\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"123234512\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJmaWxtYmFzZSIsInN1YiI6InVzZXIxIiwiZXhwIjoxNzM1NDY5MzAzLCJpYXQiOjE3MzI4NzczMDMsImp0aSI6IjY1Yzg5ZmY3LTExZDMtNGE5Zi1hNWY1LWUxZjJkNjQ0MmIwZCJ9.oGBhNSNQD-qQ6lwgCAdRKR7m_7gaC_xKr3wceOUp8P2Wof1ylxbpUsxYrJ0BQqc1Oep0Vw2bqLg5__MuQUpuevEer2xTmlF4NHJpcIN6vbDlluXqqlC0QjeI1ZAU-49ygIgpsIfeDJcbgyx9hHCEG6JRJbHkq4P1_7if9SZ8uvAfltikKHaSzgKbD7PFKEkE10sCD7oTu6N5xNGAs2YgIVrPrEVOdJMTWWn0bwN68RLkxTHlLTGmoP_JQxsP2wm6sQI6l47cfDaF13N6EhYBCBiq9yqfybQL3KddkjbjvxKB8neyQdxyCFwWkFWdtzs8GEhZdwTxUWMBWeHk985yag\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comments",
+			"item": [
+				{
+					"name": "saveComment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJmaWxtYmFzZSIsInN1YiI6InVzZXIxIiwiZXhwIjoxNzM0MzcxNTYzLCJpYXQiOjE3MzQzNzEyNjMsImp0aSI6ImEzOWU5MjFmLWFiNWItNGVhZi1iNzhhLThjNjkyZDU2MGI5OSJ9.iG-2sQXL35TFsEa6B2tK5dYVokQvokXAaJZOPZmMf5htP9q7Rs13NhorBUhEx5GMiYFMFxzqUCkEOkJNN10O91qJk0H0V3xqGNfnqhQ70A5jDyjZQ6cFfjgd-8sBCR77fDb7DILlj08joU_r2B3ZhI34rmC0jhmCPP78LKxlNgLHT824aqa9DyW13MgNxTx9L8COOY8MtqcZu0VXtgjrLZgJ3h7brL_E3uYHTS14deAIorlNWNlNn85jIHhNLcpqZgRxp5wD8wgwxAVj0taVhHnrdBLDnu4FHwtj4E93dy17Bp1UyqeIvIkvU7955iEySl9WRH59ruv9TRALGbQa4w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"tetewertwasa\",\r\n    \"filmId\": 25\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/comments/comment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comments",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllCommentsByFilmId",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comments/film/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comments",
+								"film",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteComment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comments/comment/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comments",
+								"comment",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "films",
+			"item": [
+				{
+					"name": "getFilmById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/films/film/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"films",
+								"film",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFilms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/films?page-number=0&page-size=5&sort-direction=ASC&genre=SCIENCE_FICTION",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"films"
+							],
+							"query": [
+								{
+									"key": "page-number",
+									"value": "0"
+								},
+								{
+									"key": "page-size",
+									"value": "5"
+								},
+								{
+									"key": "sort-direction",
+									"value": "ASC"
+								},
+								{
+									"key": "genre",
+									"value": "SCIENCE_FICTION"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rates",
+			"item": [
+				{
+					"name": "rateFilm",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJmaWxtYmFzZSIsInN1YiI6InVzZXIxIiwiZXhwIjoxNzM1NTk3NzExLCJpYXQiOjE3MzU1OTc0MTEsImp0aSI6ImU0YmQ0MGVjLWY5NjctNGE5Yy1iMTg1LWQxZjQwYzBlZmFmNiJ9.eMzytIs5UT73qp6oDD-R1Ulowzt3u-EWCtUhnOtlHvNn74pUmgBSIvMW4JaD2mfOQBJVgPjhmC4J0_-71M3l5WObm2rLQ6FH_m7W1KTVU9NPSgBCkZnBAar5YrnC2sfL94Q8nczs7L9Xh2xiG7U2MVE0WVa99f4Wl1d--tph9nwD2KyXtLJOkq-BePz17_C-18Hy09Wu_d-dIJwKOrBUp3JMNwZJRCSJ3VFIo25fe8g2EZRYwIzceEUQVLWM6CUDr0n9rIfNUZzfccW1I4RAqxKmo4DMLZO8kqvc4Ib37RszqL0Y0yPMX-Ih1sQNgqQ41GxIxOp372FCB5lKVqTc-A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filmId\": 1,\r\n    \"grade\": 4\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/rates/rate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rates",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteRate",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/rates/rate/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rates",
+								"rate",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllRatesByFilmId",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "getRateAverageByFilmId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/rates/rate/average/film/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rates",
+								"rate",
+								"average",
+								"film",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getRateCountByFilmId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/rates/rate/count/film/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"rates",
+								"rate",
+								"count",
+								"film",
+								"25"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
