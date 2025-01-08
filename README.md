@@ -57,9 +57,10 @@ Projekt semestralny przygotowany na kurs "Zaawansowane Techniki Programowania".
         ```
       - Zbudowanie aplikacji:
         ```bash
-        ./mvnw package
+        ./mvnw package -DskipTests
         ```
      *(Dla systemu Windows użyj `mvnw.cmd` zamiast `./mvnw`)*
+   - UWAGA - flaga -DskipTests jest wymagana ze względu na użycie w testach bazy inmemory, która do inicjalizacji wymaga struktury w finalnej bazie.
    - W katalogu `target` zostanie wygenerowany plik `.jar`, np. `filmbase-1.0.0.jar`.
 
 3. **Zbudowanie obrazu Dockera**  

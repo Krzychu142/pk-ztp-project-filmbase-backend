@@ -31,6 +31,9 @@ public class Film {
 
     private LocalDate releaseDate;
 
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Genre genre;
