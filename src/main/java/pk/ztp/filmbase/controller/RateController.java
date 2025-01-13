@@ -53,4 +53,10 @@ public class RateController {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok", rateService.getRateCountByFilmId(filmId)));
     }
 
+    @GetMapping("/rate/user/film/{filmId}")
+    public ResponseEntity<ApiResponseDTO> getRateByUserAndFilmId(
+            @PathVariable("filmId") @Min(1) long filmId
+    ){
+        return ResponseEntity.ok().body(new ApiResponseDTO("ok", rateService.getRateByUserAndFilmId(authenticationFacade.getCurrentUser(), filmId)));
+    }
 }

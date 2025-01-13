@@ -15,6 +15,7 @@ import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.RateRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -70,6 +71,21 @@ public class RateService implements IRateService, IDeletableResourceService<Rate
     @Override
     public long getRateCountByFilmId(long filmId) {
         return getRatesByFilmId(filmId).size();
+    }
+
+    @Override
+    public RateResponseDTO getRateByUserAndFilmId(User user, long filmId) {
+        Optional<Rate> optionalRate = rateRepository.findRateByUserAndFilmId(user, filmId);
+        if (optionalRate.isPresent()) {
+            Rate rate = optionalRate.get();
+            return new RateResponseDTO(
+                    rate.getId(),
+                    rate.getGrade(),
+                    filmId,
+                    UserDTO.from(user)
+            );
+        }
+        return null;
     }
 
     private List<Rate> getRatesByFilmId(long filmId) {
