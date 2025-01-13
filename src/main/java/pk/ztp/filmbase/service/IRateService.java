@@ -12,4 +12,5 @@ public interface IRateService {
     Page<Rate> getRates(int pageNumber, int pageSize, String sortDirection, long filmId);
     double getRateAverageByFilmId(long filmId);
     long getRateCountByFilmId(long filmId);
+    RateResponseDTO getRateByUserAndFilmId(User user, long filmId);
 }
