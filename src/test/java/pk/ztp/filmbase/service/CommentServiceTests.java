@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 import pk.ztp.filmbase.dto.CommentDTO;
 import pk.ztp.filmbase.enums.Genre;
 import pk.ztp.filmbase.model.Comment;
@@ -74,6 +75,7 @@ public class CommentServiceTests {
         verify(filmService, times(1)).getFilmById(savedFilm.getId());
     }
 
+    @Transactional
     @Test
     void shouldReturnAllCommentsByFilmId() {
         // Arrange
@@ -96,7 +98,7 @@ public class CommentServiceTests {
         String sortDirection = "ASC";
 
         // Act
-        Page<Comment> commentsPage = commentService.getAllCommentsByFilmId(film.getId(), pageNumber, pageSize, sortDirection);
+        Page<CommentDTO> commentsPage = commentService.getAllCommentsByFilmId(film.getId(), pageNumber, pageSize, sortDirection);
 
         // Assert
         assertThat(commentsPage).isNotNull();

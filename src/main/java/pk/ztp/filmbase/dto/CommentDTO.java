@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,5 +18,7 @@ public class CommentDTO {
 
     @NotNull(message = "Comment must be associate with film by id")
     private Long filmId;
+
+    private LocalDateTime createdAt;
     private UserDTO user;
 }

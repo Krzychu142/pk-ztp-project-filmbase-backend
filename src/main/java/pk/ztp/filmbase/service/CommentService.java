@@ -28,13 +28,21 @@ public class CommentService implements ICommentService, IDeletableResourceServic
     public CommentDTO saveComment(CommentDTO comment, User user) {
         Comment newComment = new Comment(comment.getComment(), user, filmService.getFilmById(comment.getFilmId()));
         Comment savedComment = commentRepository.save(newComment);
-        return new CommentDTO(savedComment.getId(), savedComment.getComment(), comment.getFilmId(), UserDTO.from(user));
+        return new CommentDTO(savedComment.getId(), savedComment.getComment(), comment.getFilmId(), savedComment.getCreatedAt(), UserDTO.from(user));
     }
 
     @Override
-    public Page<Comment> getAllCommentsByFilmId(long filmId, int pageNumber, int pageSize, String sortDirection) {
+    public Page<CommentDTO> getAllCommentsByFilmId(long filmId, int pageNumber, int pageSize, String sortDirection) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.fromString(sortDirection), "createdAt"));
-        return commentRepository.findByFilmId(filmId, pageable);
+        Page<Comment> commentsPage = commentRepository.findByFilmId(filmId, pageable);
+
+        return commentsPage.map(comment -> new CommentDTO(
+                comment.getId(),
+                comment.getComment(),
+                comment.getFilm().getId(),
+                comment.getCreatedAt(),
+                UserDTO.from(comment.getUser())
+        ));
     }
 
     @Override
