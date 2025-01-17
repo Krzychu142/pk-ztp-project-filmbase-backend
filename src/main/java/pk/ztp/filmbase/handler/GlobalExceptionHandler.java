@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import pk.ztp.filmbase.dto.ApiResponseDTO;
+import pk.ztp.filmbase.exception.ResourceAlreadyExist;
 import pk.ztp.filmbase.exception.ResourceNotFound;
 import pk.ztp.filmbase.exception.UserAlreadyExistsException;
 
@@ -22,6 +23,11 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFound.class)
+    public ResponseEntity<ApiResponseDTO> handleResourceAlreadyExist(ResourceAlreadyExist e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO(e.getMessage(), null));
+    }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ResponseEntity<ApiResponseDTO> handleMethodValidationException(HandlerMethodValidationException e) {
