@@ -5,17 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pk.ztp.filmbase.dto.CommentDTO;
 import pk.ztp.filmbase.dto.UserDTO;
-import pk.ztp.filmbase.exception.ResourceNotFound;
 import pk.ztp.filmbase.model.Comment;
-import pk.ztp.filmbase.model.Rate;
 import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.CommentRepository;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +27,7 @@ public class CommentService implements ICommentService, IDeletableResourceServic
         return new CommentDTO(savedComment.getId(), savedComment.getComment(), comment.getFilmId(), savedComment.getCreatedAt(), UserDTO.from(user));
     }
 
+    @Transactional
     @Override
     public Page<CommentDTO> getAllCommentsByFilmId(long filmId, int pageNumber, int pageSize, String sortDirection) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.fromString(sortDirection), "createdAt"));
