@@ -24,7 +24,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFound.class)
+    @ExceptionHandler(ResourceAlreadyExist.class)
     public ResponseEntity<ApiResponseDTO> handleResourceAlreadyExist(ResourceAlreadyExist e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO(e.getMessage(), null));
     }
