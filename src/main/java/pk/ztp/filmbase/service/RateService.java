@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import pk.ztp.filmbase.dto.RateRequestDTO;
 import pk.ztp.filmbase.dto.RateResponseDTO;
 import pk.ztp.filmbase.dto.UserDTO;
+import pk.ztp.filmbase.exception.ResourceAlreadyExist;
 import pk.ztp.filmbase.model.Film;
 import pk.ztp.filmbase.model.Rate;
 import pk.ztp.filmbase.model.User;
@@ -27,7 +28,12 @@ public class RateService implements IRateService, IDeletableResourceService<Rate
 
     @Override
     public RateResponseDTO rateFilm(RateRequestDTO rateRequestDTO, User user) {
-        Film film = filmService.getFilmById(rateRequestDTO.getFilmId());
+        Long filmId = rateRequestDTO.getFilmId();
+        Optional<Rate> optionalRate = rateRepository.findRateByUserAndFilmId(user, filmId);
+        if (optionalRate.isPresent()) {
+            throw new ResourceAlreadyExist("You have already rated this film. Please delete your previous rating before submitting a new one.");
+        }
+        Film film = filmService.getFilmById(filmId);
         Rate rate = new Rate(rateRequestDTO.getGrade(), user, film);
         Rate savedRate = rateRepository.save(rate);
         return new RateResponseDTO(

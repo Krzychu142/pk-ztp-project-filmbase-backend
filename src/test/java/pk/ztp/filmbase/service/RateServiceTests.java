@@ -7,15 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 import pk.ztp.filmbase.dto.RateRequestDTO;
 import pk.ztp.filmbase.dto.RateResponseDTO;
 import pk.ztp.filmbase.enums.Genre;
+import pk.ztp.filmbase.exception.ResourceAlreadyExist;
 import pk.ztp.filmbase.model.Film;
 import pk.ztp.filmbase.model.Rate;
 import pk.ztp.filmbase.model.User;
 import pk.ztp.filmbase.repository.FilmRepository;
 import pk.ztp.filmbase.repository.RateRepository;
 import pk.ztp.filmbase.repository.UserRepository;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class RateServiceTests {
@@ -113,7 +119,7 @@ public class RateServiceTests {
         Rate savedRate = rateRepository.save(rate);
 
         //Act & Assert
-        AccessDeniedException exception = Assertions.assertThrows(
+        AccessDeniedException exception = assertThrows(
                 AccessDeniedException.class,
                 () -> rateService.deleteRate(savedRate.getId(), savedGuest)
         );
@@ -134,6 +140,14 @@ public class RateServiceTests {
         user.setUsername("testuser");
         User savedUser = userRepository.save(user);
 
+        User user2 = new User();
+        user2.setUsername("testuser2");
+        User savedUser2 = userRepository.save(user2);
+
+        User user3 = new User();
+        user3.setUsername("testuser3");
+        User savedUser3 = userRepository.save(user3);
+
         Film film = new Film();
         film.setTitle("Test Film");
         film.setGenre(Genre.ACTION);
@@ -146,13 +160,13 @@ public class RateServiceTests {
         Rate savedRateMax = rateRepository.save(rateMax);
 
         Rate rateMid = new Rate();
-        rateMid.setUser(savedUser);
+        rateMid.setUser(savedUser2);
         rateMid.setFilm(savedFilm);
         rateMid.setGrade(midGrade);
         Rate savedRateMid = rateRepository.save(rateMid);
 
         Rate rateMin = new Rate();
-        rateMin.setUser(savedUser);
+        rateMin.setUser(savedUser3);
         rateMin.setFilm(savedFilm);
         rateMin.setGrade(minGrade);
         Rate savedRateMin = rateRepository.save(rateMin);
@@ -180,6 +194,14 @@ public class RateServiceTests {
         user.setUsername("testuser");
         User savedUser = userRepository.save(user);
 
+        User user2 = new User();
+        user2.setUsername("testuser2");
+        User savedUser2 = userRepository.save(user2);
+
+        User user3 = new User();
+        user3.setUsername("testuser3");
+        User savedUser3 = userRepository.save(user3);
+
         Film film = new Film();
         film.setTitle("Test Film");
         film.setGenre(Genre.ACTION);
@@ -192,13 +214,13 @@ public class RateServiceTests {
         rateRepository.save(firstRate);
 
         Rate secondRate = new Rate();
-        secondRate.setUser(savedUser);
+        secondRate.setUser(savedUser2);
         secondRate.setFilm(savedFilm);
         secondRate.setGrade(midGrade);
         rateRepository.save(secondRate);
 
         Rate thirdRate = new Rate();
-        thirdRate.setUser(savedUser);
+        thirdRate.setUser(savedUser3);
         thirdRate.setFilm(savedFilm);
         thirdRate.setGrade(minGrade);
         rateRepository.save(thirdRate);
@@ -240,6 +262,14 @@ public class RateServiceTests {
         user.setUsername("testuser");
         User savedUser = userRepository.save(user);
 
+        User user2 = new User();
+        user2.setUsername("testuser2");
+        User savedUser2 = userRepository.save(user2);
+
+        User user3 = new User();
+        user3.setUsername("testuser3");
+        User savedUser3 = userRepository.save(user3);
+
         Film film = new Film();
         film.setTitle("Test Film");
         film.setGenre(Genre.ACTION);
@@ -252,13 +282,13 @@ public class RateServiceTests {
         rateRepository.save(firstRate);
 
         Rate secondRate = new Rate();
-        secondRate.setUser(savedUser);
+        secondRate.setUser(savedUser2);
         secondRate.setFilm(savedFilm);
         secondRate.setGrade(midGrade);
         rateRepository.save(secondRate);
 
         Rate thirdRate = new Rate();
-        thirdRate.setUser(savedUser);
+        thirdRate.setUser(savedUser3);
         thirdRate.setFilm(savedFilm);
         thirdRate.setGrade(minGrade);
         rateRepository.save(thirdRate);
@@ -287,6 +317,39 @@ public class RateServiceTests {
 
         //Assert
         Assertions.assertEquals(0.0, averageOfRates);
+    }
+
+    @Transactional
+    @Test
+    void one_user_should_be_able_to_rate_only_one_time_one_film(){
+        // Arrange
+        User user = new User();
+        user.setUsername("testuser");
+        userRepository.save(user);
+
+        Film film = new Film();
+        film.setTitle("Test Film");
+        film.setGenre(Genre.ACTION);
+        Film savedFilm = filmRepository.save(film);
+
+        RateRequestDTO rateRequestDTO = new RateRequestDTO();
+        rateRequestDTO.setFilmId(savedFilm.getId());
+        rateRequestDTO.setGrade(4);
+
+        // Act
+        rateService.rateFilm(rateRequestDTO, user);
+
+        // Assert
+        assertThrows(ResourceAlreadyExist.class, () -> {
+            rateService.rateFilm(rateRequestDTO, user);
+        });
+
+        Page<Rate> resultRates = rateService.getRates(0, 3, "ASC", savedFilm.getId());
+        List<Rate> rates = resultRates.getContent();
+
+        Assertions.assertEquals(1, rates.size());
+        Assertions.assertEquals(4, rates.get(0).getGrade());
+        Assertions.assertEquals("testuser", rates.get(0).getUser().getUsername());
     }
 
 }
