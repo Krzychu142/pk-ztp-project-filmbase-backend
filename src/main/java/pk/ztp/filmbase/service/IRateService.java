@@ -13,4 +13,5 @@ public interface IRateService {
     double getRateAverageByFilmId(long filmId);
     long getRateCountByFilmId(long filmId);
     RateResponseDTO getRateByUserAndFilmId(User user, long filmId);
+    RateResponseDTO updateRate(long rateId, RateRequestDTO rateRequestDTO, User user);
 }
