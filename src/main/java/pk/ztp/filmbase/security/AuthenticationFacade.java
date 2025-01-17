@@ -16,8 +16,13 @@ public class AuthenticationFacade implements IAuthenticationFacade {
     @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof JwtUserDTO jwtUser) {
-            return (User) userManager.loadUserByUsername(jwtUser.getUsername());
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof JwtUserDTO jwtUser){
+                return (User) userManager.loadUserByUsername(jwtUser.getUsername());
+            }
+            if (authentication.getPrincipal() instanceof User){
+                return (User) authentication.getPrincipal();
+            }
         }
         throw new RuntimeException("No user is currently logged in");
     }

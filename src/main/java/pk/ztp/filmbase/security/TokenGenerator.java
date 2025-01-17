@@ -34,6 +34,7 @@ public class TokenGenerator {
         }
 
         TokenDTO tokenDTO = new TokenDTO();
+        // TODO: on refresh user do not have id bcs it's JwtDTO (with no id), eventually it's TODO
         tokenDTO.setUserId(user.getId());
         tokenDTO.setAccessToken(createAccessToken(auth));
 
