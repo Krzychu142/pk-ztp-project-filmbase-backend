@@ -21,7 +21,7 @@ public class AuthenticationFacade implements IAuthenticationFacade {
                 return (User) userManager.loadUserByUsername(jwtUser.getUsername());
             }
             if (authentication.getPrincipal() instanceof User){
-                return (User) authentication.getPrincipal();
+                return (User) userManager.loadUserByUsername(((User) authentication.getPrincipal()).getUsername());
             }
         }
         throw new RuntimeException("No user is currently logged in");
