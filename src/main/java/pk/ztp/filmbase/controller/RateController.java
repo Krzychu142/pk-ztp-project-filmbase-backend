@@ -33,7 +33,7 @@ public class RateController {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok", null));
     }
 
-    @PutMapping("/rate/{rateId}")
+    @PatchMapping("/rate/{rateId}")
     public ResponseEntity<ApiResponseDTO> updateRate(@PathVariable @Min(1) long rateId, @Valid @RequestBody RateRequestDTO rateRequestDTO) {
         return ResponseEntity.ok().body(new ApiResponseDTO("ok", rateService.updateRate(rateId, rateRequestDTO, authenticationFacade.getCurrentUser())));
     }
